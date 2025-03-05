@@ -4,7 +4,7 @@ import { Outlet } from "react-router";
 
 const Tasks = () => {
   return (
-    <div className="w-[600px]">
+    <div className="max-w-[616px] px-4">
       <Outlet />
       <Header />
       <TaskList />

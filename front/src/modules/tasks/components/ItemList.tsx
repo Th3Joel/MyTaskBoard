@@ -1,5 +1,5 @@
-import IconProgress from "@/assets/Time_atack_duotone.svg";
 import IconCompleted from "@/assets/Done_round_duotone.svg";
+import IconProgress from "@/assets/Time_atack_duotone.svg";
 import IconWontDo from "@/assets/close_ring_duotone.svg";
 
 const IconsTaks: Record<string, string> = {
@@ -12,7 +12,14 @@ const IconsTaks: Record<string, string> = {
 };
 type TypeTask = "completed" | "progress" | "wontdo";
 
-const TypeTask = {
+export const TypeTask: Record<
+  string,
+  {
+    bg: string;
+    buttonColor: string;
+    iconButton: string;
+  }
+> = {
   progress: {
     bg: "bg-[#F5D565]",
     buttonColor: "bg-[#E9A23B]",
@@ -39,7 +46,8 @@ interface IItemList {
 
 export const ItemList = ({ typeTask, icon, title, click }: IItemList) => {
   return (
-    <li
+    <button
+      type="button"
       onClick={click}
       className={`${TypeTask[typeTask].bg} p-4 rounded-2xl flex justify-between hover:scale-105 duration-300 cursor-pointer`}
     >
@@ -52,8 +60,12 @@ export const ItemList = ({ typeTask, icon, title, click }: IItemList) => {
       <div
         className={`${TypeTask[typeTask].buttonColor} rounded-xl w-[40px] h-[40px] grid place-items-center`}
       >
-        <img className="w-6" src={TypeTask[typeTask].iconButton} />
+        <img
+          className="w-6"
+          src={TypeTask[typeTask].iconButton}
+          alt="Icon svg"
+        />
       </div>
-    </li>
+    </button>
   );
 };

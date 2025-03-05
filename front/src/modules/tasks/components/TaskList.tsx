@@ -1,6 +1,6 @@
 import IconAdd from "@/assets/Add_round_duotone.svg";
-import { ItemList } from "./ItemList";
 import { useNavigate } from "react-router";
+import { ItemList } from "./ItemList";
 export const TaskList = () => {
   const useNav = useNavigate();
   return (
@@ -10,7 +10,7 @@ export const TaskList = () => {
         icon="clock"
         typeTask="progress"
         click={() => {
-          useNav("/task");
+          useNav("/task/add");
         }}
       />
       <ItemList title="Task Completed" icon="train" typeTask="completed" />
@@ -34,7 +34,7 @@ export const TaskList = () => {
       <div className="bg-[#F5E8D5] p-4 rounded-2xl flex justify-between">
         <div className="flex items-center gap-5">
           <div className="bg-[#E9A23B] rounded-xl w-[40px] h-[40px] grid place-items-center">
-            <img className="w-6" src={IconAdd} />
+            <img className="w-6" src={IconAdd} alt="Icon add svg" />
           </div>
           <div className="text-[14px] font-bold">Add new task</div>
         </div>
