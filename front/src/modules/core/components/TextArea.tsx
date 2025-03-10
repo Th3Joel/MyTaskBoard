@@ -4,6 +4,7 @@ interface ITextArea {
   placeholder?: string;
   value?: string;
   name: string;
+  change?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 export const TextArea = ({
   label,
@@ -11,15 +12,18 @@ export const TextArea = ({
   placeholder,
   value,
   name,
+  change,
 }: ITextArea) => {
   return (
     <span>
       {label && (
-        <label htmlFor="" className="text-[#97A3B6] text-sm ml-1">
+        <label htmlFor={name} className="text-[#97A3B6] text-sm ml-1">
           {label}
         </label>
       )}
       <textarea
+        id={name}
+        onChange={change}
         name={name}
         value={value}
         rows={rows}

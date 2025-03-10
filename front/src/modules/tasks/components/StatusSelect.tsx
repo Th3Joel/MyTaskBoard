@@ -8,17 +8,18 @@ const StatusTask: Record<string, string> = {
   wontdo: "Won't do",
 };
 
-export const StatusSelect = ({ value }: { value?: string }) => {
+interface IStatusSelect {
+  value?: string;
+  change: (data: string[]) => void;
+}
+
+export const StatusSelect = ({ value, change }: IStatusSelect) => {
   return (
     <div>
-      <label htmlFor="" className="text-[#97A3B6] text-sm ml-1">
-        Status
-      </label>
+      <span className="text-[#97A3B6] text-sm ml-1">Status</span>
       <Selection
         initializeData={value ? [value] : []}
-        selections={(data) => {
-          console.log(data);
-        }}
+        selections={change}
         render={(handleSelect, isSel) => {
           return Object.entries(StatusTask).map(([key, value]) => (
             <button
