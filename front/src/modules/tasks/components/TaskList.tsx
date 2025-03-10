@@ -1,44 +1,37 @@
-import IconAdd from "@/assets/Add_round_duotone.svg";
-import { useNavigate } from "react-router";
 import { ItemList } from "./ItemList";
+import { Banner } from "./Banner";
+import { ButtonAdd } from "./ButtonAdd";
+import { NavLink } from "react-router";
+import { taskStore } from "../store/taskStore";
+import { uuid } from "@/modules/core/helpers/uuid";
+
 export const TaskList = () => {
-  const useNav = useNavigate();
+  const { tasks, add } = taskStore();
+
   return (
-    <ul className="mt-10 flex flex-col gap-5">
-      <ItemList
-        title="Task in progress"
-        icon="clock"
-        typeTask="progress"
+    <li className="mt-10 flex flex-col gap-5">
+      {tasks.map((data) => (
+        <NavLink to={`/task/${data.id}`} key={data.id}>
+          <ItemList
+            title={data.title}
+            icon={data.icon}
+            typeTask={data.status}
+          />
+        </NavLink>
+      ))}
+
+      <Banner />
+      <ButtonAdd
         click={() => {
-          useNav("/task/add");
+          add({
+            id: uuid(),
+            title: "New Task",
+            description: "",
+            icon: "coffe",
+            status: "completed",
+          });
         }}
       />
-      <ItemList title="Task Completed" icon="train" typeTask="completed" />
-      <ItemList title="Task Won't Do" icon="coffe" typeTask="wontdo" />
-
-      <div className="bg-[#E3E8EF] p-4 rounded-2xl flex">
-        <div className="flex gap-5">
-          <div className="grid place-items-center bg-white rounded-xl w-[45px] h-[40px] text-center text-[20px]">
-            📚
-          </div>
-          <div>
-            <div className="text-[20px] font-bold">Task To Do</div>
-            <p className="text-[16px] font-[300]">
-              Create your tasks favorites with personalized colors and icons
-              about you task
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-[#F5E8D5] p-4 rounded-2xl flex justify-between">
-        <div className="flex items-center gap-5">
-          <div className="bg-[#E9A23B] rounded-xl w-[40px] h-[40px] grid place-items-center">
-            <img className="w-6" src={IconAdd} alt="Icon add svg" />
-          </div>
-          <div className="text-[14px] font-bold">Add new task</div>
-        </div>
-      </div>
-    </ul>
+    </li>
   );
 };

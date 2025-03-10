@@ -5,13 +5,17 @@ import { Button } from "@/modules/core/components/Button";
 import { Drawer } from "@/modules/core/components/Drawer";
 import { TextArea } from "@/modules/core/components/TextArea";
 import { TextField } from "@/modules/core/components/TextField";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { IconSelect } from "./IconSelect";
 import { StatusSelect } from "./StatusSelect";
+import { taskStore } from "../store/taskStore";
+import type { ITask } from "../types/taskType";
 
-export const Form = () => {
+export const Form = ({ id }: { id: string }) => {
+  const [task, setTask] = useState<ITask | undefined>();
   const useNav = useNavigate();
+  const { find, del } = taskStore();
   const [open, setOpen] = useState(false);
 
   const closeModal = () => {
@@ -21,11 +25,25 @@ export const Form = () => {
     }, 300);
   };
 
+  const delTask = (id: string) => {
+    del(id);
+    closeModal();
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const d = e.target;
+    console.log(d);
+  };
+
   useEffect(() => {
     setTimeout(() => {
       setOpen(true);
     }, 50);
+    const tk = find(id);
+    setTask(tk);
   }, []);
+
   return (
     <Drawer show={open}>
       <div className="p-4">
@@ -44,17 +62,27 @@ export const Form = () => {
           </button>
         </header>
         <div className="mt-5">
-          <form className="flex flex-col gap-5">
-            <TextField label="Task name" placeholder="Write de name" />
+          <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+            <TextField
+              name="title"
+              value={task?.title}
+              label="Task name"
+              placeholder="Write de name"
+            />
             <TextArea
+              name="description"
+              value={task?.description}
               label="Description"
               rows={7}
               placeholder="Write a short description"
             />
-            <IconSelect />
-            <StatusSelect />
+            <IconSelect value={task?.icon} />
+            <StatusSelect value={task?.status} />
             <div className="flex gap-4 ml-auto">
               <Button
+                click={() => {
+                  delTask(task?.id ?? "");
+                }}
                 text="Delete"
                 type="secondary"
                 classname="w-[120px]"
@@ -66,6 +94,7 @@ export const Form = () => {
                 type="primary"
                 classname="w-[120px]"
                 icon={<img src={IconDone} alt="Icon Done svg" />}
+                submit
               />
             </div>
           </form>

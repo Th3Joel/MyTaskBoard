@@ -9,14 +9,14 @@ const IconsTaks: Record<string, string> = {
   clock: "⏰",
 };
 
-export const IconSelect = () => {
+export const IconSelect = ({ value }: { value?: string }) => {
   return (
     <div>
       <label htmlFor="" className="text-[#97A3B6] text-sm ml-1">
         Icon
       </label>
-
       <Selection
+        initializeData={value ? [value] : []}
         selections={(data) => {
           console.log(data);
         }}

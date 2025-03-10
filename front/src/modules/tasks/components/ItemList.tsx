@@ -10,7 +10,7 @@ const IconsTaks: Record<string, string> = {
   books: "📚",
   clock: "⏰",
 };
-type TypeTask = "completed" | "progress" | "wontdo";
+export type TypeTask = "completed" | "progress" | "wontdo" | "banner" | "add";
 
 export const TypeTask: Record<
   string,
@@ -49,7 +49,7 @@ export const ItemList = ({ typeTask, icon, title, click }: IItemList) => {
     <button
       type="button"
       onClick={click}
-      className={`${TypeTask[typeTask].bg} p-4 rounded-2xl flex justify-between hover:scale-105 duration-300 cursor-pointer`}
+      className={`${TypeTask[typeTask].bg} p-4 rounded-2xl flex justify-between hover:scale-105 duration-300 w-full cursor-pointer`}
     >
       <div className="flex items-center gap-5">
         <div className="grid place-items-center bg-white rounded-xl w-[40px] h-[40px] text-center text-[20px]">
@@ -57,6 +57,7 @@ export const ItemList = ({ typeTask, icon, title, click }: IItemList) => {
         </div>
         <div className="text-[20px] font-bold">{title}</div>
       </div>
+
       <div
         className={`${TypeTask[typeTask].buttonColor} rounded-xl w-[40px] h-[40px] grid place-items-center`}
       >

@@ -6,6 +6,7 @@ interface IButton {
   type: TypeButton;
   classname?: string;
   submit?: boolean;
+  click?: () => void;
 }
 
 const TypeButtonColors: Record<
@@ -24,9 +25,17 @@ const TypeButtonColors: Record<
   },
 };
 
-export const Button = ({ text, type, icon, classname, submit }: IButton) => {
+export const Button = ({
+  text,
+  type,
+  icon,
+  classname,
+  submit,
+  click,
+}: IButton) => {
   return (
     <button
+      onClick={click}
       type={submit ? "submit" : "button"}
       className={`duration-300 hover:scale-105 ${TypeButtonColors[type].shadow} ${TypeButtonColors[type].shadowHover} cursor-pointer flex justify-center rounded-full py-[6px] px-2 text-white ${TypeButtonColors[type].color} ${classname ? classname : ""}`}
     >

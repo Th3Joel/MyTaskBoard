@@ -1,7 +1,9 @@
-import { Form } from '../components/Form';
+import { useParams } from "react-router";
+import { Form } from "../components/Form";
 
 const EditTask = () => {
-  return <Form />;
+  const params = useParams<{ id: string }>();
+  return <Form id={params.id ?? ""} />;
 };
 
 export default EditTask;

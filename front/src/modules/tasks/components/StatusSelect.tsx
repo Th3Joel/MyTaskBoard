@@ -8,13 +8,14 @@ const StatusTask: Record<string, string> = {
   wontdo: "Won't do",
 };
 
-export const StatusSelect = () => {
+export const StatusSelect = ({ value }: { value?: string }) => {
   return (
     <div>
       <label htmlFor="" className="text-[#97A3B6] text-sm ml-1">
         Status
       </label>
       <Selection
+        initializeData={value ? [value] : []}
         selections={(data) => {
           console.log(data);
         }}
