@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type THandleSelect = (key: string) => void;
 type TIsSel = (key: string) => boolean;
@@ -9,7 +9,6 @@ interface ISelection {
   multiselect?: boolean;
   render: (handleSelect: THandleSelect, isSel: TIsSel) => React.ReactNode;
 }
-
 export const Selection = ({
   multiselect,
   selections,
@@ -32,16 +31,20 @@ export const Selection = ({
     setSelected(isSel(key) ? [] : [key]);
   };
 
+  //Prevent an ininite loop from ocurring
   if (initializeData) {
     useEffect(() => {
-      setSelected(initializeData);
+      if (JSON.stringify(selected) !== JSON.stringify(initializeData)) {
+        setSelected(initializeData);
+      }
     }, [initializeData]);
   }
 
   useEffect(() => {
-    selections(selected);
-  }, [selected, selections]);
-
+    if (JSON.stringify(selected) !== JSON.stringify(initializeData)) {
+      selections(selected);
+    }
+  }, [selected]);
   return (
     <div className="flex gap-3 mt-1 flex-wrap not-sm:justify-evenly">
       {render(handleSelect, isSel)}

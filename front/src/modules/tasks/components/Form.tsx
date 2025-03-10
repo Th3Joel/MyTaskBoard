@@ -15,7 +15,7 @@ import type { ITask } from "../types/taskType";
 export const Form = ({ id }: { id: string }) => {
   const [task, setTask] = useState<ITask | undefined>();
   const useNav = useNavigate();
-  const { find, del } = taskStore();
+  const { find, del, upd, tasks } = taskStore();
   const [open, setOpen] = useState(false);
 
   const closeModal = () => {
@@ -32,17 +32,20 @@ export const Form = ({ id }: { id: string }) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const d = e.target;
-    console.log(d);
+    upd(id, task as ITask);
+    closeModal();
   };
 
   useEffect(() => {
     setTimeout(() => {
       setOpen(true);
     }, 50);
+  }, []);
+
+  useEffect(() => {
     const tk = find(id);
     setTask(tk);
-  }, []);
+  }, [tasks]);
 
   return (
     <Drawer show={open}>
@@ -68,6 +71,17 @@ export const Form = ({ id }: { id: string }) => {
               value={task?.title}
               label="Task name"
               placeholder="Write de name"
+              change={(e) => {
+                if (task !== undefined) {
+                  setTask((prev) => {
+                    const d = {
+                      ...prev,
+                      [e.target.name]: e.target.value,
+                    } as ITask | undefined;
+                    return d;
+                  });
+                }
+              }}
             />
             <TextArea
               name="description"
@@ -75,9 +89,46 @@ export const Form = ({ id }: { id: string }) => {
               label="Description"
               rows={7}
               placeholder="Write a short description"
+              change={(e) => {
+                if (task !== undefined) {
+                  setTask((prev) => {
+                    const d = {
+                      ...prev,
+                      [e.target.name]: e.target.value,
+                    } as ITask | undefined;
+                    return d;
+                  });
+                }
+              }}
             />
-            <IconSelect value={task?.icon} />
-            <StatusSelect value={task?.status} />
+            <IconSelect
+              value={task?.icon}
+              change={(data) => {
+                if (task !== undefined) {
+                  setTask((prev) => {
+                    const d = {
+                      ...prev,
+                      icon: data[0],
+                    } as ITask | undefined;
+                    return d;
+                  });
+                }
+              }}
+            />
+            <StatusSelect
+              value={task?.status}
+              change={(data) => {
+                if (task !== undefined) {
+                  setTask((prev) => {
+                    const d = {
+                      ...prev,
+                      status: data[0],
+                    } as ITask | undefined;
+                    return d;
+                  });
+                }
+              }}
+            />
             <div className="flex gap-4 ml-auto">
               <Button
                 click={() => {
