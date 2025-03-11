@@ -35,6 +35,11 @@ export const TypeTask: Record<
     buttonColor: "bg-[#DD524C]",
     iconButton: IconWontDo,
   },
+  undefined: {
+    bg: "bg-[#F7D4D3]",
+    buttonColor: "bg-[#DD524C]",
+    iconButton: IconWontDo,
+  },
 };
 
 interface IItemList {
