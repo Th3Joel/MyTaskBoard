@@ -5,6 +5,7 @@ interface ITextArea {
   value?: string;
   name: string;
   change?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  classname?: string;
 }
 export const TextArea = ({
   label,
@@ -13,6 +14,7 @@ export const TextArea = ({
   value,
   name,
   change,
+  classname,
 }: ITextArea) => {
   return (
     <span>
@@ -28,7 +30,7 @@ export const TextArea = ({
         value={value}
         rows={rows}
         placeholder={placeholder}
-        className="border-2 mt-1 resize-none border-[#E3E8EF] placeholder:text-[#97A3B6] rounded-lg w-full py-2 px-4 focus:border-[#3662E3] focus:outline-none duration-300"
+        className={`border-2  resize-none border-[#E3E8EF] placeholder:text-[#97A3B6] rounded-lg w-full  focus:border-[#3662E3] focus:outline-none duration-300 ${classname ? classname : "mt-1 py-2 px-4"}`}
       />
     </span>
   );
