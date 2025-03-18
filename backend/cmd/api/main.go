@@ -1,15 +1,25 @@
 package main
 
 import (
+	"MyTaskBoard/configs"
+
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	configs.ShowBanner()
 	main := gin.New()
 
-	main.GET("/api/v1", func(ctx *gin.Context) {
+	main.Use(configs.Logger())
+	//Routes
+	api := main.Group("/api/v1")
+	api.GET("/", func(ctx *gin.Context) {
 		ctx.String(200, "Hola")
 	})
 
-	main.Run(":2000")
+	go func() {
+		main.Run(":" + configs.Env().SERVER_PORT)
+	}()
+
+	select {}
 }
