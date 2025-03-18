@@ -1,6 +1,7 @@
 package configs
 
 import (
+	"log"
 	"os"
 	"sync"
 )
@@ -17,62 +18,42 @@ type env struct {
 	DB_PORT     string
 }
 
-var singleInstance *env
-var mutex sync.Mutex
+var envInstance *env
+var envOnce sync.Once
 
 //var Env = envInit()
 
 // Pattern singlenton
 func Env() *env {
-	if singleInstance == nil {
-		mutex.Lock()
-		defer mutex.Unlock()
-		if singleInstance == nil {
-			singleInstance = &env{}
-			singleInstance.loadServer()
-			singleInstance.loadDatabase()
-		}
-	}
-	return singleInstance
+	envOnce.Do(func() {
+		envInstance = &env{}
+		envInstance.loadServer()
+		envInstance.loadDatabase()
+	})
+
+	return envInstance
 }
 
 func (e *env) loadServer() {
-	e.SERVER_PORT = os.Getenv("SERVER_PORT")
-	e.SERVER_MODE = os.Getenv("SERVER_MODE")
-
-	if e.SERVER_PORT == "" {
-		e.SERVER_PORT = "8080"
-	}
-
-	if e.SERVER_MODE == "" {
-		e.SERVER_MODE = "env"
-	}
+	e.SERVER_PORT = getEnv("SERVER_PORT", "8080")
+	e.SERVER_MODE = getEnv("SERVER_MODE", "env")
 }
 
 func (e *env) loadDatabase() {
-	e.DB_HOST = os.Getenv("DB_HOST")
-	e.DB_USER = os.Getenv("DB_USER")
-	e.DB_PASSWORD = os.Getenv("DB_PASSWORD")
-	e.DB_NAME = os.Getenv("DB_NAME")
-	e.DB_PORT = os.Getenv("DB_PORT")
+	e.DB_HOST = getEnv("DB_HOST", "localhost")
+	e.DB_USER = getEnv("DB_USER", "user")
+	e.DB_PASSWORD = getEnv("DB_PASSWORD", "1234")
+	e.DB_NAME = getEnv("DB_NAME", "database")
+	e.DB_PORT = getEnv("DB_PORT", "1234")
+}
 
-	if e.DB_HOST == "" {
-		e.DB_HOST = "localhost"
+func getEnv(key, defaultValue string) string {
+	value := os.Getenv(key)
+	if value == "" {
+		if defaultValue == "" {
+			log.Fatalf("Environment variable %s is required but not set", key)
+		}
+		return defaultValue
 	}
-
-	if e.DB_USER == "" {
-		e.DB_USER = "user"
-	}
-
-	if e.DB_PASSWORD == "" {
-		e.DB_PASSWORD = "1234"
-	}
-
-	if e.DB_NAME == "" {
-		e.DB_NAME = "database"
-	}
-
-	if e.DB_PORT == "" {
-		e.DB_PORT = "1234"
-	}
+	return value
 }
