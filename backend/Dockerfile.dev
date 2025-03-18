@@ -1,0 +1,6 @@
+FROM golang:1.24.1
+RUN apt-get update && apt upgrade -y
+
+WORKDIR /app
+RUN go install github.com/air-verse/air@latest
+CMD [ "air" ]
