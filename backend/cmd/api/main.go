@@ -7,9 +7,9 @@ import (
 )
 
 func main() {
+	configs.DB()
 	configs.ShowBanner()
 	main := gin.New()
-
 	main.Use(configs.Logger())
 	//Routes
 	api := main.Group("/api/v1")
