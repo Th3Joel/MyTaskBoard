@@ -5,6 +5,6 @@ WORKDIR /app
 
 COPY cmd/build/sis .
 
-EXPOSE 5000
+EXPOSE 80
 
 CMD [ "./sis" ]
