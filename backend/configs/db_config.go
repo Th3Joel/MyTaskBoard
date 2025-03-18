@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"gorm.io/driver/postgres"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
@@ -26,11 +26,12 @@ func DB() *db {
 }
 
 func (db *db) connect() {
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s TimeZone=America/Managua", Env().DB_HOST, Env().DB_USER, Env().DB_PASSWORD, Env().DB_NAME, Env().DB_PORT)
+	//dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s TimeZone=America/Managua", Env().DB_HOST, Env().DB_USER, Env().DB_PASSWORD, Env().DB_NAME, Env().DB_PORT)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true&tls=true", Env().DB_USER, Env().DB_PASSWORD, Env().DB_HOST, Env().DB_PORT, Env().DB_NAME)
 	for {
 		msgError := ""
 		var err error
-		db.gorm, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
+		db.gorm, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
 			Logger: func() logger.Interface {
 				if Env().SERVER_MODE == "prod" {
 					return logger.Default.LogMode(logger.Silent)
