@@ -68,7 +68,7 @@ func (db *db) connect() {
 
 func migrate() {
 	var errors []error
-	errors = append(errors, dbInstance.gorm.AutoMigrate(models.BoardModel{}))
+	errors = append(errors, dbInstance.gorm.AutoMigrate(models.Board{}))
 
 	for _, v := range errors {
 		if v != nil {
