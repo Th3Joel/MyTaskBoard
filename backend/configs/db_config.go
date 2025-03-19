@@ -1,7 +1,9 @@
 package configs
 
 import (
+	"MyTaskBoard/internal/board/models"
 	"fmt"
+	"log"
 	"sync"
 	"time"
 
@@ -61,4 +63,16 @@ func (db *db) connect() {
 		time.Sleep(time.Second * 3)
 	}
 	fmt.Println("Connected to database")
+	migrate()
+}
+
+func migrate() {
+	var errors []error
+	errors = append(errors, dbInstance.gorm.AutoMigrate(models.BoardModel{}))
+
+	for _, v := range errors {
+		if v != nil {
+			log.Fatal(v)
+		}
+	}
 }
