@@ -2,7 +2,7 @@ package models
 
 import "time"
 
-type BoardModel struct {
+type Board struct {
 	ID          string `json:"id,omitempty" gorm:"primaryKey"`
 	Name        string `json:"name,omitempty"`
 	Description string `json:"description,omitempty"`
