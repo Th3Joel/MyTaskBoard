@@ -2,6 +2,7 @@ package repository
 
 import (
 	"MyTaskBoard/internal/board/models"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -18,7 +19,8 @@ func NewBoardRepositoryGorm(db *gorm.DB) BoardRepository {
 
 // Create implements BoardRepository.
 func (b *boardRepositoryGorm) Create(board *models.Board, fields *[]string) (*models.Board, error) {
-	sql := b.db.Raw("INSERT INTO board (id, name, description) VALUES (?, ?, ?)", board.ID, board.Name, board.Description)
+	sql := b.db.Exec("INSERT INTO boards (id, name, description) VALUES (?, ?, ?)", board.ID, board.Name, board.Description)
+	fmt.Println("Cosas" + board.Name)
 
 	if sql.RowsAffected < 1 {
 		return nil, nil
@@ -33,7 +35,7 @@ func (b *boardRepositoryGorm) Create(board *models.Board, fields *[]string) (*mo
 
 // DeleteById implements BoardRepository.
 func (b *boardRepositoryGorm) DeleteById(id *string, fields *[]string) (bool, error) {
-	sql := b.db.Raw("DELETE FROM board WHERE id = ?", *id)
+	sql := b.db.Exec("DELETE FROM boards WHERE id = ?", *id)
 	if sql.RowsAffected < 1 {
 		return false, nil
 	}
@@ -48,7 +50,7 @@ func (b *boardRepositoryGorm) DeleteById(id *string, fields *[]string) (bool, er
 func (b *boardRepositoryGorm) GetAll(fields *[]string) (*[]models.Board, error) {
 	var boards []models.Board
 
-	sql := b.db.Raw("SELECT id, name, description FROm board").Scan(&boards)
+	sql := b.db.Raw("SELECT id, name, description FROM boards").Scan(&boards)
 
 	if sql.RowsAffected < 1 {
 		return nil, nil
@@ -64,7 +66,7 @@ func (b *boardRepositoryGorm) GetAll(fields *[]string) (*[]models.Board, error) 
 func (b *boardRepositoryGorm) GetById(id *string, fields *[]string) (*models.Board, error) {
 	var board models.Board
 
-	sql := b.db.Raw("SELECT id,name,description FROM board WHERE id = ?", *id).Scan(&board)
+	sql := b.db.Raw("SELECT id,name,description FROM boards WHERE id = ?", *id).Scan(&board)
 
 	if sql.RowsAffected < 1 {
 		return nil, nil
@@ -80,7 +82,7 @@ func (b *boardRepositoryGorm) GetById(id *string, fields *[]string) (*models.Boa
 // UpdateById implements BoardRepository.
 func (b *boardRepositoryGorm) UpdateById(id *string, board *models.Board, fields *[]string) (*models.Board, error) {
 
-	sql := b.db.Raw("UPDATE board SET id = ?, name = ?, description = ? WHERE id = ?", board.ID, board.Name, board.Description)
+	sql := b.db.Exec("UPDATE boards SET name = ?, description = ? WHERE id = ?", board.Name, board.Description, *id)
 
 	if sql.RowsAffected < 1 {
 		return nil, nil
