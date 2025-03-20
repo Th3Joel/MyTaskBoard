@@ -1,6 +1,6 @@
 FROM ubuntu:latest
 
-RUN apt-get update && apt upgrade -y
+RUN apt-get update && apt upgrade -y && apt install git
 WORKDIR /app
 
 COPY cmd/build/sis .
