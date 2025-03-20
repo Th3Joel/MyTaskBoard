@@ -34,6 +34,6 @@ func Logger() gin.HandlerFunc {
 
 func ShowBanner() {
 	gin.SetMode(gin.ReleaseMode)
-	fmt.Println("\n┌       ----- Users Microservice TradeMaster Api -----      ┐")
-	fmt.Printf("│       ******* Server running in port -> %s *******      │\n\n", Env().SERVER_PORT)
+	fmt.Println("\n┌      ----- Users Microservice TradeMaster Api -----      ┐")
+	fmt.Printf("│       ******* Server running in port -> %s *******       │\n\n", Env().SERVER_PORT)
 }

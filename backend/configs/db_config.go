@@ -1,7 +1,9 @@
 package configs
 
 import (
+	"MyTaskBoard/internal/board/models"
 	"fmt"
+	"log"
 	"sync"
 	"time"
 
@@ -11,7 +13,7 @@ import (
 )
 
 type db struct {
-	gorm *gorm.DB
+	G *gorm.DB
 }
 
 var dbInstance *db
@@ -31,7 +33,7 @@ func (db *db) connect() {
 	for {
 		msgError := ""
 		var err error
-		db.gorm, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+		db.G, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
 			Logger: func() logger.Interface {
 				if Env().SERVER_MODE == "prod" {
 					return logger.Default.LogMode(logger.Silent)
@@ -40,7 +42,7 @@ func (db *db) connect() {
 			}(),
 			PrepareStmt: true,
 		})
-		pool, err2 := db.gorm.DB()
+		pool, err2 := db.G.DB()
 
 		pool.SetMaxOpenConns(100)
 		pool.SetMaxIdleConns(10)
@@ -61,4 +63,16 @@ func (db *db) connect() {
 		time.Sleep(time.Second * 3)
 	}
 	fmt.Println("Connected to database")
+	migrate()
+}
+
+func migrate() {
+	var errors []error
+	errors = append(errors, dbInstance.G.AutoMigrate(models.Board{}))
+
+	for _, v := range errors {
+		if v != nil {
+			log.Fatal(v)
+		}
+	}
 }
