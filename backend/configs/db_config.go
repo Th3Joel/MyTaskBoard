@@ -34,6 +34,7 @@ func (db *db) connect() {
 		msgError := ""
 		var err error
 		db.G, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+			SkipDefaultTransaction: true,
 			Logger: func() logger.Interface {
 				if Env().SERVER_MODE == "prod" {
 					return logger.Default.LogMode(logger.Silent)

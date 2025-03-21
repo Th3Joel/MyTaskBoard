@@ -66,7 +66,7 @@ func (b *boardRepositoryGorm) GetAll(fields *[]string) (*[]models.Board, error) 
 func (b *boardRepositoryGorm) GetById(id *string, fields *[]string) (*models.Board, error) {
 	var board models.Board
 
-	sql := b.db.Raw("SELECT id,name,description FROM boards WHERE id = ?", *id).Scan(&board)
+	sql := b.db.Raw("SELECT id, name, description FROM boards WHERE id = ?", *id).Scan(&board)
 
 	if sql.RowsAffected < 1 {
 		return nil, nil
