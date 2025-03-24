@@ -21,6 +21,7 @@ func main() {
 	api := main.Group("/api")
 
 	routes.BoardRouter(api)
+	routes.TaskRouter(api)
 
 	go func() {
 		main.Run(":" + configs.Env().SERVER_PORT)
