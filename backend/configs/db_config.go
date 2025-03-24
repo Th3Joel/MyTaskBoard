@@ -1,7 +1,8 @@
 package configs
 
 import (
-	"MyTaskBoard/internal/board/models"
+	modelsBoard "MyTaskBoard/internal/board/models"
+	modelsTask "MyTaskBoard/internal/task/models"
 	"fmt"
 	"log"
 	"sync"
@@ -20,10 +21,12 @@ var dbInstance *db
 var dbOnce sync.Once
 
 func DB() *db {
-	dbOnce.Do(func() {
-		dbInstance = &db{}
-		dbInstance.connect()
-	})
+	if dbInstance == nil {
+		dbOnce.Do(func() {
+			dbInstance = &db{}
+			dbInstance.connect()
+		})
+	}
 	return dbInstance
 }
 
@@ -34,6 +37,7 @@ func (db *db) connect() {
 		msgError := ""
 		var err error
 		db.G, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+			SkipDefaultTransaction: true,
 			Logger: func() logger.Interface {
 				if Env().SERVER_MODE == "prod" {
 					return logger.Default.LogMode(logger.Silent)
@@ -68,7 +72,8 @@ func (db *db) connect() {
 
 func migrate() {
 	var errors []error
-	errors = append(errors, dbInstance.G.AutoMigrate(models.Board{}))
+	errors = append(errors, dbInstance.G.AutoMigrate(modelsBoard.Board{}))
+	errors = append(errors, dbInstance.G.AutoMigrate(modelsTask.Task{}))
 
 	for _, v := range errors {
 		if v != nil {
