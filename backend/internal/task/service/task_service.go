@@ -3,6 +3,8 @@ package service
 import (
 	"MyTaskBoard/internal/task/models"
 	"MyTaskBoard/internal/task/repository"
+
+	"github.com/google/uuid"
 )
 
 type taskService struct {
@@ -17,6 +19,7 @@ func NewTaskService(s *repository.TaskRepository) TaskService {
 
 // Create implements TaskService.
 func (t *taskService) Create(task *models.Task) (*models.Task, error) {
+	task.ID = uuid.NewString()
 	return (*t.serv).Create(task, &[]string{})
 }
 
